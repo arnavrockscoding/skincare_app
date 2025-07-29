@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Centered Login Box</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap');
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background: linear-gradient(135deg,#4e54c8,#8f94fb);
+      font-family:'Poppins',sans-serif;
+    }
+    .card {
+      width:400px;
+      max-width:90%;
+      background: rgba(0,0,0,0.4);
+      color:#fff;
+      padding:60px 30px;
+      border-radius:20px;
+      box-shadow:0 8px 32px rgba(0,0,0,0.3);
+    }
+    .toggle-tab {
+      display:flex;
+      justify-content:flex-end;
+      gap:10px;
+      margin-bottom:30px;
+    }
+    .toggle-tab button {
+      background:none;
+      border:none;
+      color:#aaa;
+      font-size:18px;
+      cursor:pointer;
+      padding:5px;
+      transition:.3s;
+    }
+    .toggle-tab button.active {
+      color:#fff;
+      border-bottom:3px solid #fff;
+    }
+    form { display:none; flex-direction:column; }
+    form.active { display:flex; }
+    .input-group { position:relative; margin-bottom:20px; }
+    .input-group input {
+      width:100%;
+      padding:12px 10px;
+      background:transparent;
+      border:none;
+      border-bottom:2px solid #aaa;
+      color:#fff;
+      font-size:16px;
+      outline:none;
+    }
+    .input-group label {
+      position:absolute;
+      top:12px; left:10px;
+      color:#ccc;
+      font-size:16px;
+      pointer-events:none;
+      transition:.3s;
+    }
+    .input-group input:focus + label,
+    .input-group input:not(:placeholder-shown) + label {
+      top:-8px;
+      font-size:12px;
+      color:#fff;
+    }
+    .toggle-pass {
+      position:absolute;
+      right:10px;
+      top:50%;
+      transform:translateY(-50%);
+      cursor:pointer;
+      color:#ccc;
+    }
+    .btn {
+      padding:14px;
+      background: linear-gradient(45deg,#ff416c,#ff4b2b);
+      color:#fff;
+      font-size:16px;
+      border:none;
+      border-radius:30px;
+      cursor:pointer;
+      transition:.3s;
+      margin-top:10px;
+    }
+    .btn:hover {
+      background: linear-gradient(45deg,#ff4b2b,#ff416c);
+    }
+    .error-msg {
+      color:#ff7777;
+      font-size:13px;
+      margin-top:-12px;
+      margin-bottom:10px;
+      display:none;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="toggle-tab">
+      <button id="btnLogin" class="active">Login</button>
+      <button id="btnSignup">Sign Up</button>
+    </div>
+    <form id="loginForm" class="active">
+      <div class="input-group">
+        <input type="text" id="loginUser" placeholder=" " required />
+        <label for="loginUser">Username or Email</label>
+      </div>
+      <div class="input-group">
+        <input type="password" id="loginPass" placeholder=" " required />
+        <label for="loginPass">Password</label>
+        <span class="toggle-pass" onclick="togglePassword('loginPass')">👁️</span>
+      </div>
+      <button type="submit" class="btn">Login</button>
+    </form>
+    <form id="signupForm">
+      <div class="input-group">
+        <input type="text" id="signupUser" placeholder=" " required />
+        <label for="signupUser">Username</label>
+      </div>
+      <div class="input-group">
+        <input type="password" id="signupPass" placeholder=" " required />
+        <label for="signupPass">Password</label>
+        <span class="toggle-pass" onclick="togglePassword('signupPass')">👁️</span>
+      </div>
+      <div id="passError" class="error-msg">Password must be at least 8 characters.</div>
+      <div class="input-group">
+        <input type="password" id="signupConfirm" placeholder=" " required />
+        <label for="signupConfirm">Confirm Password</label>
+        <span class="toggle-pass" onclick="togglePassword('signupConfirm')">👁️</span>
+      </div>
+      <div id="confirmError" class="error-msg">Passwords do not match.</div>
+      <button type="submit" class="btn">Sign Up</button>
+    </form>
+  </div>
+
+<script>
+  const btnLogin = document.getElementById('btnLogin');
+  const btnSignup = document.getElementById('btnSignup');
+  const loginForm = document.getElementById('loginForm');
+  const signupForm = document.getElementById('signupForm');
+  btnLogin.onclick = () => {
+    btnLogin.classList.add('active');
+    btnSignup.classList.remove('active');
+    loginForm.classList.add('active');
+    signupForm.classList.remove('active');
+  };
+  btnSignup.onclick = () => {
+    btnSignup.classList.add('active');
+    btnLogin.classList.remove('active');
+    signupForm.classList.add('active');
+    loginForm.classList.remove('active');
+  };
+  function togglePassword(id) {
+    const inp = document.getElementById(id);
+    inp.type = inp.type === 'password' ? 'text' : 'password';
+  }
+  signupForm.onsubmit = e => {
+    e.preventDefault();
+    const p = document.getElementById('signupPass').value;
+    const pc = document.getElementById('signupConfirm').value;
+    document.getElementById('passError').style.display = p.length < 8 ? 'block' : 'none';
+    document.getElementById('confirmError').style.display = p !== pc ? 'block' : 'none';
+    if (p.length >= 8 && p === pc) alert('Registration OK – submit to backend');
+  };
+  loginForm.onsubmit = e => {
+    e.preventDefault();
+    alert('Login OK – submit credentials to backend');
+  };
+</script>
+</body>
+</html>
